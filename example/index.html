@@ -10,9 +10,24 @@
 <body>
 	<div id="app">
 		<h2>一般使用场景</h2>
-		<el-form>
-			<el-form-item label="姓名"></el-form-item>
-			<el-form-item label="手机号"></el-form-item>
+		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm">
+			<el-form-item label="姓名" prop="username">
+				<template slot="error" slot-scope="error">
+					<el-popover
+						placement="bottom"
+						title="标题"
+						width="200"
+						trigger="manual"
+						:content="error.error"
+						:value="!!error.error">
+						<el-input v-model="formData.username" slot="reference" style="width:240px"></el-input>
+					</el-popover>
+				</template>
+			</el-popover>
+			</el-form-item>
+			<el-form-item label="手机号" prop="telphone">
+				<el-input v-model="formData.telphone" style="width:240px"></el-input>
+			</el-form-item>
 			<el-form-item>
 				<el-button type="info">重置</el-button>
 				<el-button type="primary">提交</el-button>
@@ -30,12 +45,34 @@
 		new Vue({
 			el: '#app',
 			data(){
-					return {
-							formData:{
-								username:'',
-								telphone:''
+				return {
+					formData:{
+						username:'',
+						telphone:''
+					},
+					rules:{
+						username:[{ required: true, message: '请填写姓名', trigger: 'blur' }],
+						telphone:[
+							{
+								trigger: 'blur',
+								validator:(rule, value, callback)=>{
+									if(!value){
+										callback(new Error("请输入电话号码"))
+									}else if(!(/^1[3456789]\d{9}$/.test(value))){
+										callback(new Error("电话号码格式有误"))
+									} else {
+										callback()
+									}
+								}
 							}
+						]
 					}
+				}
+			},
+			methods:{
+				submit(){
+					this.$refs['ruleForm'].validate()
+				}
 			}
 		})
 	</script>
