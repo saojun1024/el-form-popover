@@ -9,14 +9,35 @@
 </head>
 <body>
 	<div id="app">
-		<h2>一般使用场景{{msg}}</h2>
+		<h2>一般使用场景</h2>
+		<el-form>
+			<el-form-item label="姓名"></el-form-item>
+			<el-form-item label="手机号"></el-form-item>
+			<el-form-item>
+				<el-button type="info">重置</el-button>
+				<el-button type="primary">提交</el-button>
+			</el-form-item>
+		</el-form>
 		<h2>表格单元格使用</h2>
 		<h2>列表滚动</h2>
 		<h2>自定义错误信息</h2>
 	</div>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
-  	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 	<script src="../index.js"></script>
-	<script src="./main.js"></script>
+	<script>
+		Vue.use(FormErrorMsg)
+		new Vue({
+			el: '#app',
+			data(){
+					return {
+							formData:{
+								username:'',
+								telphone:''
+							}
+					}
+			}
+		})
+	</script>
 </body>
 </html>
