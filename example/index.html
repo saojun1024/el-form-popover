@@ -10,27 +10,25 @@
 <body>
 	<div id="app">
 		<h2>一般使用场景</h2>
-		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm">
+		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm" @validate="formValidate">
 			<el-form-item label="姓名" prop="username">
-				<template slot="error" slot-scope="error">
 					<el-popover
 						placement="bottom"
-						title="标题"
+						title=""
 						width="200"
 						trigger="manual"
-						:content="error.error"
-						:value="!!error.error">
+						content="123"
+						v-model="aa">
 						<el-input v-model="formData.username" slot="reference" style="width:240px"></el-input>
 					</el-popover>
-				</template>
 			</el-popover>
 			</el-form-item>
 			<el-form-item label="手机号" prop="telphone">
 				<el-input v-model="formData.telphone" style="width:240px"></el-input>
 			</el-form-item>
 			<el-form-item>
-				<el-button type="info">重置</el-button>
-				<el-button type="primary">提交</el-button>
+				<el-button type="info" @click="reset">重置</el-button>
+				<el-button type="primary" @click="submit">提交</el-button>
 			</el-form-item>
 		</el-form>
 		<h2>表格单元格使用</h2>
@@ -46,6 +44,7 @@
 			el: '#app',
 			data(){
 				return {
+					aa:false,
 					formData:{
 						username:'',
 						telphone:''
@@ -70,8 +69,18 @@
 				}
 			},
 			methods:{
+				formValidate(prop,pass,error){
+					console.log(prop,pass,error)
+					this.aa = true
+				},
 				submit(){
-					this.$refs['ruleForm'].validate()
+					this.$refs['ruleForm'].validate((valid)=>{
+
+					})
+				},
+
+				reset(){
+					this.$refs['ruleForm'].resetFields()
 				}
 			}
 		})
