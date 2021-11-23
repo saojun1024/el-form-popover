@@ -12,16 +12,10 @@
 		<h2>一般使用场景</h2>
 		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm" @validate="formValidate">
 			<el-form-item label="姓名" prop="username">
-					<el-popover
-						placement="bottom"
-						title=""
-						width="200"
-						trigger="manual"
-						content="123"
-						v-model="aa">
-						<el-input v-model="formData.username" slot="reference" style="width:240px"></el-input>
-					</el-popover>
-			</el-popover>
+				<PopTips slot="error" slot-scope="error">
+					{{error.error}}
+				</PopTips>
+				<el-input v-model="formData.username" style="width:240px"></el-input>
 			</el-form-item>
 			<el-form-item label="手机号" prop="telphone">
 				<el-input v-model="formData.telphone" style="width:240px"></el-input>

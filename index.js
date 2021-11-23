@@ -6,8 +6,35 @@
  * 
  **/
 
+const PopTips = {
+	template:
+	`<div :style="popStyle">
+		<slot/>
+	</div>`,
+	props:{
+		error:{
+			type:Object,
+			default:()=>{
+				return {
+					error:''
+				}
+			}
+		}
+	},
+  data(){
+    return {
+			popStyle:{
+				position:'absolute',
+				left:0,
+				bottom:"100%"
+			}
+    }
+  }
+}
+
 const FormErrorMsg = {
     install:function(_Vue){
         console.log("我被执行了",_Vue)
+        _Vue.component("poptips",PopTips)
     }
 }
