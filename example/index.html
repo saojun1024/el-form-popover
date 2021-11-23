@@ -10,12 +10,12 @@
 <body>
 	<div id="app">
 		<h2>一般使用场景</h2>
-		<el-form>
+		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm">
 			<el-form-item label="姓名"></el-form-item>
 			<el-form-item label="手机号"></el-form-item>
 			<el-form-item>
-				<el-button type="info">重置</el-button>
-				<el-button type="primary">提交</el-button>
+				<el-button type="info" @click="reset">重置</el-button>
+				<el-button type="primary" @click="submit">提交</el-button>
 			</el-form-item>
 		</el-form>
 		<h2>表格单元格使用</h2>
@@ -36,6 +36,14 @@
 								telphone:''
 							}
 					}
+			},
+			methods:{
+				submit(){
+
+				},
+				reset(){
+
+				}
 			}
 		})
 	</script>
