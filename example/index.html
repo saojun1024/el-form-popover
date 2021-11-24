@@ -53,7 +53,16 @@
 
 
 
-		<h2>列表滚动</h2>
+		<h2>列表滚动(测试被遮挡部分的表现)</h2>
+		<ul>
+			<li v-for="item in stuInfo.tableData">
+				<input type="text" v-model="item.username"/>
+			</li>
+		</ul>
+
+
+
+
 		<h2>自定义错误信息</h2>
 	</div>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
