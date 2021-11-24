@@ -10,15 +10,49 @@
 <body>
 	<div id="app">
 		<h2>一般使用场景</h2>
-		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm">
-			<el-form-item label="姓名"></el-form-item>
-			<el-form-item label="手机号"></el-form-item>
+		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm" @validate="formValidate">
+			<el-form-item label="姓名" prop="username">
+				<el-input v-model="formData.username" style="width:240px"></el-input>
+			</el-form-item>
+			<el-form-item label="手机号" prop="telphone">
+				<el-input v-model="formData.telphone" style="width:240px"></el-input>
+			</el-form-item>
 			<el-form-item>
 				<el-button type="info" @click="reset">重置</el-button>
 				<el-button type="primary" @click="submit">提交</el-button>
 			</el-form-item>
 		</el-form>
 		<h2>表格单元格使用</h2>
+		<el-table :data="stuInfo.tableData" style="width:1000px" border>
+			<el-table-column label="姓名" prop="username">
+				<template slot-scope="scope">
+					<el-input v-model="scope.row.username"></el-input>
+				</template>
+			</el-table-column>
+			<el-table-column label="性别" prop="sex">
+				<template slot-scope="scope">
+					<el-radio-group v-model="scope.row.sex">
+						<el-radio label="0">男</el-radio>
+						<el-radio label="1">女</el-radio>
+					</el-radio-group>
+				</template>
+			</el-table-column>
+			<el-table-column label="电话" prop="telphone">
+				<template slot-scope="scope">
+					<el-input v-model="scope.row.telphone"></el-input>
+				</template>
+			</el-table-column>
+			<el-table-column label="操作" width="300px">
+				<template slot-scope="scope">
+					<el-button type="danger" @click="deletes(scope)">删除</el-button>
+					<el-button type="primary">修改</el-button>
+					<el-button v-if="scope.$index === stuInfo.tableData.length-1" type="success" @click="add">增加</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+
+
+
 		<h2>列表滚动</h2>
 		<h2>自定义错误信息</h2>
 	</div>
@@ -30,19 +64,80 @@
 		new Vue({
 			el: '#app',
 			data(){
-					return {
-							formData:{
-								username:'',
-								telphone:''
+				return {
+					formData:{
+						username:'',
+						telphone:'',
+						sex:'',
+					},
+
+					stuInfo:{
+						tableData:[
+							{
+								id:0,
+								username:'jack',
+								telphone:'13100001111',
+								sex:'',
+							},
+							{
+								id:1,
+								username:'luna',
+								telphone:'13100002222',
+								sex:'1',
+							},
+							{
+								id:2,
+								username:'xiaozhang',
+								telphone:'13100009999',
+								sex:'0',
 							}
+						]
+					},
+
+					rules:{
+						username:[{ required: true, message: '请填写姓名', trigger: 'blur' }],
+						telphone:[
+							{
+								trigger: 'blur',
+								validator:(rule, value, callback)=>{
+									if(!value){
+										callback(new Error("请输入电话号码"))
+									}else if(!(/^1[3456789]\d{9}$/.test(value))){
+										callback(new Error("电话号码格式有误"))
+									} else {
+										callback()
+									}
+								}
+							}
+						]
 					}
+				}
 			},
 			methods:{
-				submit(){
-
+				formValidate(prop,pass,error){
+					console.log(prop,pass,error)
+					this.aa = true
 				},
-				reset(){
+				submit(){
+					this.$refs['ruleForm'].validate((valid)=>{
 
+					})
+				},
+
+				reset(){
+					this.$refs['ruleForm'].resetFields()
+				},
+
+				add(){
+					this.stuInfo.tableData.push({
+						id:this.stuInfo.tableData.length,
+						username:'',
+						telphone:'',
+						sex:''
+					})
+				},
+				deletes(scope){
+					this.stuInfo.tableData.splice(scope.$index,1)
 				}
 			}
 		})
