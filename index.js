@@ -7,10 +7,32 @@
  **/
 
 const PopTips = {
-	template:
-	`<div class="pop-tips">
-		<slot/>
-	</div>`,
+	// template:
+	// `<div :class="['pop-tips','pop-tips__${this.placement}']">
+	// 	<slot/>
+	// </div>`,
+	render:function(h,context){
+		if(this.hiddenAfter){
+			setTimeout(()=>{
+				this.visible = false
+			},this.hiddenAfter)
+		}
+		return h("div",{
+			class:{
+				'pop-tips':true,
+				[`pop-tips__${this.placement}`]:true,
+				'pop-tips--hidden':this.visible === false
+			},
+		},[this.$slots.default || error.error])
+	},
+
+
+	data(){
+		return {
+			visible:true
+		}
+	},
+
 	props:{
 		// element-ui 错误信息
 		error:{
@@ -57,16 +79,7 @@ const PopTips = {
 			type:Number,
 			default:0
 		}
-	},
-  data(){
-    return {
-			popStyle:{
-				position:'absolute',
-				left:0,
-				bottom:"100%"
-			}
-    }
-  }
+	}
 }
 
 const FormErrorMsg = {

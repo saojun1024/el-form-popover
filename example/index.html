@@ -18,11 +18,11 @@
 				</PopTips>
 				<el-input v-model="formData.username" style="width:240px"></el-input>
 			</el-form-item>
-			<el-form-item label="手机号" prop="telphone">
-				<PopTips slot="error" slot-scope="error">
+			<el-form-item label="手机号" prop="telphone" style="width:320px">
+				<PopTips slot="error" slot-scope="error" placement="right" :hidden-after="2000">
 					{{error.error}}
 				</PopTips>
-				<el-input v-model="formData.telphone" style="width:240px"></el-input>
+				<el-input v-model="formData.telphone"></el-input>
 			</el-form-item>
 			<el-form-item>
 				<el-button type="info" @click="reset">重置</el-button>

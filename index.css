@@ -2,7 +2,7 @@
   text-align: center;
   border-radius: 4px;
 	position: absolute;
-  bottom:calc(100% + 8px);
+  visibility: visible;
   word-break: break-all;
   min-width: 120px;
   white-space: nowrap;
@@ -12,10 +12,34 @@
 	color: white;
 }
 
-.pop-tips::after {
+
+.pop-tips--hidden{
+  visibility: hidden !important;
+}
+
+
+.pop-tips__top{
+  bottom:calc(100% + 8px);
+}
+
+.pop-tips__right{
+  left:calc(100% + 8px);
+  top:0;
+}
+
+
+
+
+
+
+
+
+
+
+.pop-tips__top::after {
 	content: " ";
 	position: absolute;
-	top: 100%; /* 提示工具底部 */
+	top: 100%;
 	left: 50%;
 	margin-left: -5px;
 	border-width: 5px;
@@ -23,5 +47,18 @@
   border-width: 5px;
 	border-style: solid;
 	border-color: #F56C6C transparent transparent transparent;
+}
+
+.pop-tips__right::after {
+	content: " ";
+	position: absolute;
+	top: 50%;
+	left: 0%;
+  margin-top: -5px;
+	margin-left: -10px;
+	border-width: 5px;
+  border-style: solid;
+	border-style: solid;
+	border-color: transparent #F56C6C transparent transparent;
 }
 
