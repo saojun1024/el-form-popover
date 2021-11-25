@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <style>
+
+    .el-dialog__wrapper{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .el-dialog{
+      display: flex;
+      margin:0 !important;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .el-dialog__header{
+      height:30px;
+      line-height:30px;
+      padding:0;
+      width:100%;
+    }
+
+    .el-dialog__footer{
+      height:30px;
+      line-height:30px;
+      padding:0;
+      width:100%;
+    }
+
+    .el-dialog__body{
+      padding:0;
+      width:100%;
+      overflow: hidden;
+    }
+
+
+  </style>
+</head>
+<body>
+  <div id="app">
+    <el-button type="text" @click="open">点击打开 Dialog</el-button>
+    <el-dialog
+      title="提示"
+      :visible.sync="dialogVisible"
+      width="600px"
+      :before-close="handleClose">
+      <div :style="{overflow: aa,height:clientHeight+'px'}">
+        <ul id="haha">
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+          <li>1233</li>
+        </ul>
+        <el-table :data="tableData" :height="tHeight">
+          <el-table-column label="姓名" prop="name"></el-table-column>
+          <el-table-column label="性别" prop="sex"></el-table-column>
+        </el-table>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="mini" type="primary" @click="dialogVisible = false">确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script>
+    new Vue({
+      el:'#app',
+      data(){
+        return {
+          dialogVisible: false,
+          tableData:[
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+            {name:'张三',sex:'男'},
+          ],
+          clientHeight:0,
+          io:null,
+          tHeight:'auto',
+          aa:'scroll'
+        }
+      },
+      mounted(){
+        this.calcHeight()
+        window.addEventListener("resize",()=>{
+          this.calcHeight()
+        })
+
+
+        // 定义一个交叉观察器
+        this.io = new IntersectionObserver(ioes => {
+          ioes.forEach(ioe => {
+              const el = ioe.target
+              const intersectionRatio = ioe.intersectionRatio
+              if (intersectionRatio > 0 && intersectionRatio <= 1) {
+                this.cb(true)
+              }else{
+                this.cb(false)
+              }
+              el.onload = el.onerror = () => io.unobserve(el)
+          })
+        })
+
+       
+
+        
+
+
+
+
+
+
+
+      },
+      methods: {
+        cb(flag){
+          if(flag){
+            this.tHeight = 'auto'
+            this.aa = 'scroll'
+          }else{
+            this.tHeight = 790-200
+            this.aa = 'hidden'
+          }
+        },
+
+        open(){
+          this.dialogVisible = true
+          this.$nextTick(()=>{
+            const e = document.querySelector("#haha")
+            this.io.observe(e)
+          })
+        },
+        calcHeight(){
+          const height = document.documentElement.clientHeight
+
+          const p = (1329 - 790) / 1329
+          
+
+          const dHeight = height*(1-p)
+
+          if(dHeight>790){
+            this.clientHeight = 730
+          }else if(dHeight<=790 && dHeight>=490){
+            this.clientHeight = parseInt(dHeight)
+          }else{
+            this.clientHeight = 400
+          }
+
+
+
+
+
+
+          // const h = height - (90 + 730)
+          // if(h>0){
+          //   this.clientHeight = 730
+          // }else{
+          //   this.clientHeight = 400
+          // }
+        },
+        handleClose(done) {
+          
+          this.$confirm('确认关闭？')
+            .then(_ => {
+              done();
+            })
+            .catch(_ => {});
+        }
+      }
+    })
+  </script>
+</body>
+</html>
