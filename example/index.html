@@ -7,33 +7,37 @@
 		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 		<link rel="stylesheet" href="../index.css">
     <title>formErrorMsg测试用例</title>
+		<style>
+			#app{
+				width:1000px;
+				margin: 0 auto;
+			}
+		</style>
 </head>
 <body>
 	<div id="app">
 		<h2>一般使用场景</h2>
-		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm" @validate="formValidate">
+		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm" :show-message="false">
 			<el-form-item label="姓名" prop="username">
-				<PopTips slot="error" slot-scope="error">
-					{{error.error}}
+				<PopTips placement="top" :hidden-after="1000" trigger="focus">
+					<el-input v-model="formData.username" style="width:240px"></el-input>
 				</PopTips>
-				<el-input v-model="formData.username" style="width:240px"></el-input>
 			</el-form-item>
 
 			<el-form-item label="性别" prop="sex">
-				<PopTips slot="error" slot-scope="error">
-					{{error.error}}
-				</PopTips>
-				<el-radio-group v-model="formData.sex">
-					<el-radio :label="1">男</el-radio>
-					<el-radio :label="2">女</el-radio>
-				</el-radio-group>
+				<PopTips placement="top">
+					<el-radio-group v-model="formData.sex">
+						<el-radio :label="1">男</el-radio>
+						<el-radio :label="2">女</el-radio>
+						<el-radio label="">未知</el-radio>
+					</el-radio-group>
+				</PopTips>	
 			</el-form-item>
 
 			<el-form-item label="手机号" prop="telphone" style="width:320px">
-				<PopTips slot="error" slot-scope="error" placement="right" :hidden-after="2000">
-					{{error.error}}
+				<PopTips placement="right" :hidden-after="1000" trigger="focus" :auto-hidden="false">
+					<el-input v-model="formData.telphone"></el-input>
 				</PopTips>
-				<el-input v-model="formData.telphone"></el-input>
 			</el-form-item>
 			<el-form-item>
 				<el-button type="info" @click="reset">重置</el-button>
@@ -41,7 +45,7 @@
 			</el-form-item>
 		</el-form>
 		<h2>表格单元格使用</h2>
-		<el-table :data="stuInfo.tableData" style="width:1000px" border>
+		<el-table :data="stuInfo.tableData" style="width:1000px" border :height="300">
 			<el-table-column label="姓名" prop="username">
 				<template slot-scope="scope">
 					<el-input v-model="scope.row.username"></el-input>
