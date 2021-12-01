@@ -11,39 +11,57 @@ const PopTips = {
 	// `<div :class="['pop-tips','pop-tips__${this.placement}']">
 	// 	<slot/>
 	// </div>`,
-	render:function(h,context){
-		if(this.hiddenAfter){
-			setTimeout(()=>{
-				this.visible = false
-			},this.hiddenAfter)
-		}
-		return h("div",{
-			class:{
-				'pop-tips':true,
-				[`pop-tips__${this.placement}`]:true,
-				'pop-tips--hidden':this.visible === false
-			},
-		},[this.$slots.default || error.error])
-	},
+	// render:function(h,context){
+	// 	if(this.hiddenAfter){
+	// 		setTimeout(()=>{
+	// 			this.visible = false
+	// 		},this.hiddenAfter)
+	// 	}
 
+	// 	return h("el-tooltip",{
 
+	// 	},[this.$slots.default])
+	// 	// return h("div",{
+	// 	// 	class:{
+	// 	// 		'pop-tips':true,
+	// 	// 		[`pop-tips__${this.placement}`]:true,
+	// 	// 		'pop-tips--hidden':this.visible === false
+	// 	// 	},
+	// 	// },[this.$slots.default])
+	// },
+
+	template:`
+	<el-popover
+   	 	placement="bottom"
+    	title="标题"
+    width="200"
+    trigger="manual"
+    :content="msg"
+    v-model="visible">
+	<template slot="reference">
+	<slot></slot>
+	</template>
+	
+  	</el-popover>
+`,
+	inject:['elFormItem'],
 	data(){
 		return {
-			visible:true
+			visible:false,
+			msg:''
+		}
+	},
+
+	watch:{
+		'elFormItem.validateMessage':{
+			handler(newVal){
+				this.visible = newVal ? true : false
+				this.msg = newVal
+			}
 		}
 	},
 
 	props:{
-		// element-ui 错误信息
-		error:{
-			type:Object,
-			default:()=>{
-				return {
-					error:''
-				}
-			}
-		},
-
 		// 定位参考的元素
 		refer:{
 			type:String,
