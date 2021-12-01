@@ -7,10 +7,6 @@
  **/
 
 const PopTips = {
-	// template:
-	// `<div :class="['pop-tips','pop-tips__${this.placement}']">
-	// 	<slot/>
-	// </div>`,
 	render:function(h,context){
 		if(this.hiddenAfter){
 			setTimeout(()=>{
@@ -23,9 +19,20 @@ const PopTips = {
 				[`pop-tips__${this.placement}`]:true,
 				'pop-tips--hidden':this.visible === false
 			},
-		},[this.$slots.default || error.error])
+			style:{
+				'min-width':`${this.minWidth}px`
+			}
+		},[this.$slots.default])
 	},
 
+	inject: {
+		elForm: {
+			default: ''
+		},
+		elFormItem: {
+			default: ''
+		}
+	},
 
 	data(){
 		return {
@@ -34,16 +41,6 @@ const PopTips = {
 	},
 
 	props:{
-		// element-ui 错误信息
-		error:{
-			type:Object,
-			default:()=>{
-				return {
-					error:''
-				}
-			}
-		},
-
 		// 定位参考的元素
 		refer:{
 			type:String,
@@ -56,16 +53,10 @@ const PopTips = {
 			default:'top'
 		},
 
-		// 最大宽度
-		maxWidth:{
-			type:String,
-			default:'200px'
-		},
-
 		// 最小宽度
 		minWidth:{
-			type:String,
-			default:'120px'
+			type:Number,
+			default:120
 		},
 
 		// 主题
@@ -79,6 +70,9 @@ const PopTips = {
 			type:Number,
 			default:0
 		}
+	},
+	mounted(){
+		console.log(this.elFormItem)
 	}
 }
 

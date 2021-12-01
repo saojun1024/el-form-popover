@@ -18,6 +18,17 @@
 				</PopTips>
 				<el-input v-model="formData.username" style="width:240px"></el-input>
 			</el-form-item>
+
+			<el-form-item label="性别" prop="sex">
+				<PopTips slot="error" slot-scope="error">
+					{{error.error}}
+				</PopTips>
+				<el-radio-group v-model="formData.sex">
+					<el-radio :label="1">男</el-radio>
+					<el-radio :label="2">女</el-radio>
+				</el-radio-group>
+			</el-form-item>
+
 			<el-form-item label="手机号" prop="telphone" style="width:320px">
 				<PopTips slot="error" slot-scope="error" placement="right" :hidden-after="2000">
 					{{error.error}}
@@ -66,10 +77,6 @@
 				<input type="text" v-model="item.username"/>
 			</li>
 		</ul>
-
-
-
-
 		<h2>自定义错误信息</h2>
 	</div>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -112,12 +119,13 @@
 
 					rules:{
 						username:[{ required: true, message: '请填写姓名', trigger: 'blur' }],
+						sex:[{ required: true, message: '请填写性别', trigger: 'change' }],
 						telphone:[
 							{
 								trigger: 'blur',
 								validator:(rule, value, callback)=>{
 									if(!value){
-										callback(new Error("请输入电话号码"))
+										callback(new Error("please input your telphone number"))
 									}else if(!(/^1[3456789]\d{9}$/.test(value))){
 										callback(new Error("电话号码格式有误"))
 									} else {

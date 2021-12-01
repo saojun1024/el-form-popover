@@ -21,23 +21,31 @@
     }
 
     .el-dialog__header{
-      height:30px;
-      line-height:30px;
-      padding:0;
+      padding:24px 24px 20px 24px;
       width:100%;
+      box-sizing: border-box;
     }
 
     .el-dialog__footer{
-      height:30px;
-      line-height:30px;
-      padding:0;
+      padding:12px 24px 24px 24px;
       width:100%;
+      box-sizing: border-box;
     }
 
     .el-dialog__body{
-      padding:0;
+      padding:0px 0px 0px 24px;
       width:100%;
-      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .bb{
+      visibility: hidden;
+      position: relative;
+    }
+    .cc{
+      position: absolute;
+      top:300px;
+      background: red;
     }
 
 
@@ -51,8 +59,8 @@
       :visible.sync="dialogVisible"
       width="600px"
       :before-close="handleClose">
-      <div :style="{overflow: aa,height:clientHeight+'px'}">
-        <ul id="haha">
+      <div :style="{'overflow-y':'scroll',height:bodyHeight+'px',position:'relative'}" id="body-wrap">
+        <ul id="goods-lists">
           <li>1233</li>
           <li>1233</li>
           <li>1233</li>
@@ -66,14 +74,17 @@
           <li>1233</li>
           <li>1233</li>
         </ul>
-        <el-table :data="tableData" :height="tHeight">
-          <el-table-column label="姓名" prop="name"></el-table-column>
-          <el-table-column label="性别" prop="sex"></el-table-column>
-        </el-table>
+        <div id="tb">
+          <el-table :data="tableData" border>
+            <el-table-column label="姓名" prop="name"></el-table-column>
+            <el-table-column label="性别" prop="sex"></el-table-column>
+          </el-table>
+        </div>
+        
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="dialogVisible = false">取 消</el-button>
-        <el-button size="mini" type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button  @click="dialogVisible = false">取 消</el-button>
+        <el-button  type="primary" @click="dialogVisible = false">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -136,19 +147,20 @@
             {name:'张三',sex:'男'},
             {name:'张三',sex:'男'},
           ],
-          clientHeight:0,
+          bodyHeight:0,
+          bodyOffsetHeight:0,
           io:null,
           tHeight:'auto',
-          aa:'scroll'
+          aa:'scroll',
+          visible:true
         }
       },
+
       mounted(){
-        this.calcHeight()
+        this.calcBodyHeight()
         window.addEventListener("resize",()=>{
-          this.calcHeight()
+          this.calcBodyHeight()
         })
-
-
         // 定义一个交叉观察器
         this.io = new IntersectionObserver(ioes => {
           ioes.forEach(ioe => {
@@ -162,71 +174,57 @@
               el.onload = el.onerror = () => io.unobserve(el)
           })
         })
-
-       
-
-        
-
-
-
-
-
-
-
       },
+
       methods: {
+
+        // 动态计算body高度
+        calcBodyHeight(){
+          const height = document.documentElement.clientHeight
+          const headerAndFooterHeight = (24+16+20)+(12+30+24)
+          // 方案一 各个分辨率电脑高度占比不一样，小屏电脑占比大，大屏电脑占比小，适合于弹窗内内容不多，没有长列表数据情况下
+          if(height > 1200){
+            this.bodyHeight = height*0.7 > 730 ? 730 - headerAndFooterHeight : parseInt(height*0.7) - headerAndFooterHeight
+          }else if(height>800 && height<=1200){
+            this.bodyHeight = height*0.75 > 730 ? 730 - headerAndFooterHeight : parseInt(height*0.75) - headerAndFooterHeight
+          } else {
+            this.bodyHeight = height*0.8 <400 ? 400 - headerAndFooterHeight : parseInt(height*0.8) - headerAndFooterHeight
+          }
+          // 方案二 各个电脑下高度均为固定的百分比 TODO
+        },
+
+
+
         cb(flag){
+          this.visible = flag
           if(flag){
-            this.tHeight = 'auto'
-            this.aa = 'scroll'
+            const e = document.querySelector("#tb .el-table__header-wrapper")
+            e.style.position = 'inherit'
+            e.style.zIndex = 9999
+            e.style.top = 'inherit'
           }else{
-            this.tHeight = 790-200
-            this.aa = 'hidden'
+            const e = document.querySelector("#tb .el-table__header-wrapper")
+            e.style.position = 'fixed'
+            e.style.zIndex = 9999
+            e.style.top = `${this.bodyOffsetHeight}px`
           }
         },
 
         open(){
           this.dialogVisible = true
           this.$nextTick(()=>{
-            const e = document.querySelector("#haha")
+            const e = document.querySelector("#goods-lists")
             this.io.observe(e)
+
+            const el = document.getElementById("body-wrap")
+
+            const obj = el.getBoundingClientRect()
+            this.bodyOffsetHeight = obj.top
           })
         },
-        calcHeight(){
-          const height = document.documentElement.clientHeight
 
-          const p = (1329 - 790) / 1329
-          
-
-          const dHeight = height*(1-p)
-
-          if(dHeight>790){
-            this.clientHeight = 730
-          }else if(dHeight<=790 && dHeight>=490){
-            this.clientHeight = parseInt(dHeight)
-          }else{
-            this.clientHeight = 400
-          }
-
-
-
-
-
-
-          // const h = height - (90 + 730)
-          // if(h>0){
-          //   this.clientHeight = 730
-          // }else{
-          //   this.clientHeight = 400
-          // }
-        },
         handleClose(done) {
-          
-          this.$confirm('确认关闭？')
-            .then(_ => {
-              done();
-            })
-            .catch(_ => {});
+         done()
         }
       }
     })
