@@ -44,44 +44,48 @@
 				<el-button type="primary" @click="submit">提交</el-button>
 			</el-form-item>
 		</el-form>
+
+
+
 		<h2>表格单元格使用</h2>
-		<el-table :data="stuInfo.tableData" style="width:1000px" border :height="300">
-			<el-table-column label="姓名" prop="username">
-				<template slot-scope="scope">
-					<el-input v-model="scope.row.username"></el-input>
-				</template>
-			</el-table-column>
-			<el-table-column label="性别" prop="sex">
-				<template slot-scope="scope">
-					<el-radio-group v-model="scope.row.sex">
-						<el-radio label="0">男</el-radio>
-						<el-radio label="1">女</el-radio>
-					</el-radio-group>
-				</template>
-			</el-table-column>
-			<el-table-column label="电话" prop="telphone">
-				<template slot-scope="scope">
-					<el-input v-model="scope.row.telphone"></el-input>
-				</template>
-			</el-table-column>
-			<el-table-column label="操作" width="300px">
-				<template slot-scope="scope">
-					<el-button type="danger" @click="deletes(scope)">删除</el-button>
-					<el-button type="primary">修改</el-button>
-					<el-button v-if="scope.$index === stuInfo.tableData.length-1" type="success" @click="add">增加</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
-
-
-
-		<h2>列表滚动(测试被遮挡部分的表现)</h2>
-		<ul>
-			<li v-for="item in stuInfo.tableData">
-				<input type="text" v-model="item.username"/>
-			</li>
-		</ul>
-		<h2>自定义错误信息</h2>
+		<el-form :model="stuInfo" :rules="rules" label-width="80px" ref="ruleForm2" :show-message="false">
+			<el-table :data="stuInfo.tableData" style="width:1000px" border :height="300">
+				<el-table-column label="姓名" prop="username">
+					<template slot-scope="scope">
+						<el-form-item 
+						:prop="'tableData.' + scope.$index + '.username'"  
+						:rules="{
+							required: true, message: '不能为空', trigger: 'blur'
+						}">
+							<PopTips placement="bottom">
+								<el-input v-model="scope.row.username"></el-input>
+							</PopTips>
+						</el-form-item>
+					</template>
+				</el-table-column>
+				<el-table-column label="性别" prop="sex">
+					<template slot-scope="scope">
+						<el-radio-group v-model="scope.row.sex">
+							<el-radio label="0">男</el-radio>
+							<el-radio label="1">女</el-radio>
+						</el-radio-group>
+					</template>
+				</el-table-column>
+				<el-table-column label="电话" prop="telphone">
+					<template slot-scope="scope">
+						<el-input v-model="scope.row.telphone"></el-input>
+					</template>
+				</el-table-column>
+				<el-table-column label="操作" width="300px">
+					<template slot-scope="scope">
+						<el-button type="danger" @click="deletes(scope)">删除</el-button>
+						<el-button type="primary">修改</el-button>
+						<el-button v-if="scope.$index === stuInfo.tableData.length-1" type="success" @click="add">增加</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+		</el-form>
+	
 	</div>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
@@ -116,6 +120,18 @@
 								id:2,
 								username:'xiaozhang',
 								telphone:'13100009999',
+								sex:'0',
+							},
+							{
+								id:4,
+								username:'luna',
+								telphone:'13100002222',
+								sex:'1',
+							},
+							{
+								id:5,
+								username:'',
+								telphone:'',
 								sex:'0',
 							}
 						]
