@@ -28,12 +28,7 @@ const PopTips = {
 			once:false,
 			inputEl:null,
 			visible:false,
-			errorMsg:'',
-			popoverStyle:{
-				padding:'8px',
-				background:'red',
-				color:'white'
-			}
+			errorMsg:''
 		}
 	},
 

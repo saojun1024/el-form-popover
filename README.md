@@ -9,3 +9,22 @@ element-ui 表单验证错误提示默认展示于输入框下面，或者可以
 
 ## 使用条件
 你的项目需要使用的是vue技术栈和element-ui组件库来实现表单验证。
+
+
+## 安装 & 使用
+```
+npm install elform-error-tips --save
+
+```
+或者cdn
+```
+```
+
+```
+import ElFormErrorTips from elform-error-tips
+Vue.use(ElFormErrorTips)
+```
+
+## 属性
+
+

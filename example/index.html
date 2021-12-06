@@ -12,6 +12,13 @@
 				width:1000px;
 				margin: 0 auto;
 			}
+
+			.quote{
+				padding: 24px 12px;
+    		border-radius: 4px;
+    		background: #eceef1;
+    		border-left: 4px solid #409eff;
+			}
 		</style>
 </head>
 <body>
@@ -48,6 +55,9 @@
 
 
 		<h2>表格单元格使用</h2>
+		<blockquote class="quote">
+			表格内有滚动条时，部分输入框可能在可视区域之外，这个时候触发表单验证会将可视区域之外的气泡提示也显示出来。这个时候可以通过refer属性来指定参考元素，在这个区域之外的气泡框第一次不会出现。
+		</blockquote>
 		<el-form :model="stuInfo" :rules="rules" label-width="80px" ref="ruleForm2" :show-message="false">
 			<el-table :data="stuInfo.tableData" style="width:1000px" border :height="300">
 				<el-table-column label="姓名" prop="username">
@@ -85,6 +95,7 @@
 				</el-table-column>
 			</el-table>
 		</el-form>
+		<el-button type="primary" @click="submitTable">验证一下</el-button>
 	
 	</div>
 	<script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -165,6 +176,12 @@
 				submit(){
 					this.$refs['ruleForm'].validate((valid)=>{
 
+					})
+				},
+
+				submitTable(){
+					this.$refs['ruleForm2'].validate((valid)=>{
+						
 					})
 				},
 
