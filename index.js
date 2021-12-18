@@ -7,29 +7,6 @@
  **/
 
 const PopTips = {
-	// template:
-	// `<div :class="['pop-tips','pop-tips__${this.placement}']">
-	// 	<slot/>
-	// </div>`,
-	// render:function(h,context){
-	// 	if(this.hiddenAfter){
-	// 		setTimeout(()=>{
-	// 			this.visible = false
-	// 		},this.hiddenAfter)
-	// 	}
-
-	// 	return h("el-tooltip",{
-
-	// 	},[this.$slots.default])
-	// 	// return h("div",{
-	// 	// 	class:{
-	// 	// 		'pop-tips':true,
-	// 	// 		[`pop-tips__${this.placement}`]:true,
-	// 	// 		'pop-tips--hidden':this.visible === false
-	// 	// 	},
-	// 	// },[this.$slots.default])
-	// },
-
 	template:`
 	<el-popover
    	 	placement="bottom"
