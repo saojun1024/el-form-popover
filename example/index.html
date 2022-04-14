@@ -26,13 +26,13 @@
 		<h2>一般使用场景</h2>
 		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm" :show-message="false">
 			<el-form-item label="姓名" prop="username">
-				<PopTips placement="top" :hidden-after="1000" trigger="focus">
+				<PopTips placement="top" :hidden-after="1000" trigger="focus" ref="aa">
 					<el-input v-model="formData.username" style="width:240px"></el-input>
 				</PopTips>
 			</el-form-item>
 
 			<el-form-item label="性别" prop="sex">
-				<PopTips placement="top">
+				<PopTips placement="top" ref="aa">
 					<el-radio-group v-model="formData.sex">
 						<el-radio :label="1">男</el-radio>
 						<el-radio :label="2">女</el-radio>
@@ -59,7 +59,7 @@
 			表格内有滚动条时，部分输入框可能在可视区域之外，这个时候触发表单验证会将可视区域之外的气泡提示也显示出来。这个时候可以通过refer属性来指定参考元素，在这个区域之外的气泡框第一次不会出现。
 		</blockquote>
 		<el-form :model="stuInfo" :rules="rules" label-width="80px" ref="ruleForm2" :show-message="false">
-			<el-table :data="stuInfo.tableData" style="width:1000px" border :height="300">
+			<el-table :data="stuInfo.tableData" style="width:1000px" border :height="300" ref="table">
 				<el-table-column label="姓名" prop="username">
 					<template slot-scope="scope">
 						<el-form-item 
@@ -67,8 +67,8 @@
 						:rules="{
 							required: true, message: '不能为空', trigger: 'blur'
 						}">
-							<PopTips placement="bottom" refer=".el-table__body-wrapper">
-								<el-input v-model="scope.row.username"></el-input>
+							<PopTips placement="bottom" refer=".el-table__body-wrapper" :open-io="true">
+								<el-input v-model="scope.row.username" @input="handleInput"></el-input>
 							</PopTips>
 						</el-form-item>
 					</template>
@@ -102,7 +102,28 @@
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
 	<script src="../index.js"></script>
 	<script>
+		
+		function a(){
+			var name = "张三"
+			return function(){
+				console.log(this.name)
+			}
+		}
+		
+
 		Vue.use(FormErrorMsg)
+
+		function debounce(fn,ms){
+			var tick = null
+			return function(){
+				if(tick){
+					clearTimeout(tick)
+					tick = null
+				}
+				tick = setTimeout(fn,ms)
+			}
+		}
+
 		new Vue({
 			el: '#app',
 			data(){
@@ -117,7 +138,7 @@
 						tableData:[
 							{
 								id:0,
-								username:'jack',
+								username:'',
 								telphone:'13100001111',
 								sex:'',
 							},
@@ -168,7 +189,22 @@
 					}
 				}
 			},
+			created(){
+				debounce(this.handleInput,2000)
+			},
+			mounted(){
+				
+			},
 			methods:{
+				handleInput(){
+					console.log(this.formData)
+				},
+
+				postInfo(){
+					console.log("输出了")
+				},
+
+
 				formValidate(prop,pass,error){
 					console.log(prop,pass,error)
 					this.aa = true

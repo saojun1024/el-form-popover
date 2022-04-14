@@ -8,6 +8,7 @@
 
 
 var FormErrorMsg = (function(){
+	let io = null
 	const PopTips = {
 		template:`
 			<el-popover
@@ -52,7 +53,7 @@ var FormErrorMsg = (function(){
 			// hidden-after不为0时重新显示错误信息的触发方式
 			trigger:{
 				type:String,
-				default:'change'
+				default:''
 			},
 	
 			// 出现位置 支持 top bottom right
@@ -89,27 +90,71 @@ var FormErrorMsg = (function(){
 			refer:{
 				type:String,
 				default:""
+			},
+
+			// 开启交叉观察器
+			openIo:{
+				type:Boolean,
+				default:false
 			}
 		},
 		mounted(){
-			this.inputOnFocus()
+			this.inputEl = this.$children[0].$children[0]
 			if(this.refer){
 				this.hiddenPopOutside()
+			}
+			if(!this.hiddenAfter){
+				if(this.openIo){
+					io = new IntersectionObserver((entries)=>{
+						entries.forEach((item)=>{
+							if(item.intersectionRatio <= 0 && this.errorMsg){
+								this.visible = false
+							}
+							if(item.intersectionRatio > 0 && this.errorMsg){
+								this.visible = true
+							}
+						})
+					});
+					io.observe(this.inputEl.$el)
+				}
+			}else{
+				this.inputOnFocus()
 			}
 		},
 	
 		beforeDestroy(){
 			this.inputEl.$off(this.trigger)
+			if(io){
+				io.unobserve(this.inputEl.$el);
+			}
 		},
 	
 		methods:{
 			// 设置了过多少毫秒后需要监听focus事件来重新显示错误信息
 			inputOnFocus(){
-				if(this.hiddenAfter){
-					this.inputEl = this.$children[0].$children[0]
-					this.inputEl.$on(this.trigger,()=>{
+				// if(this.hiddenAfter){
+				// 	this.inputEl = this.$children[0].$children[0]
+				// 	this.inputEl.$el.addEventListener(this.trigger,()=>{
+				// 		if(this.errorMsg){
+				// 			this.visible = true
+				// 			if(this.hiddenAfter && this.hiddenAfter>0){
+				// 				setTimeout(()=>{
+				// 					this.visible = false
+				// 				},this.hiddenAfter)
+				// 			}
+				// 		}
+				// 	})
+				// }
+				
+				if(this.trigger){
+					this.inputEl.$el.addEventListener(this.trigger,()=>{
 						if(this.errorMsg){
 							this.visible = true
+							if(this.hiddenAfter && this.hiddenAfter>0){
+								setTimeout(()=>{
+									this.visible = false
+								},this.hiddenAfter)
+							}
 						}
 					})
 				}
@@ -117,14 +162,12 @@ var FormErrorMsg = (function(){
 
 			// 设置了参考元素，则隐藏在视野之外的气泡框
 			hiddenPopOutside(){
-				debugger
 				const referEl = document.querySelector(this.refer).getBoundingClientRect()
 				const slotEl = this.$slots.default[0].elm.getBoundingClientRect()
-				if(slotEl.top < referEl.top || slotEl.top < referEl.bottom){
+				const isVisible = (referEl.top<=slotEl.top) && (slotEl.top <= referEl.bottom)
+				if(!isVisible){
 					this.visible = false
 				}
-
-
 			},
 	
 			showPopover(){
@@ -142,28 +185,8 @@ var FormErrorMsg = (function(){
 						}
 					}
 				}
-			},
-	
-			// initIntersectionObserver(){
-			// 	console.log(this.$slots)
-			// 	if(this.refer){
-			// 		if(IntersectionObserver){
-			// 			console.log(this)
-			// 			this.ioInstance = new IntersectionObserver((entry)=>{
-			// 				if(entry.intersectionRatio<=0){
-			// 					this.visible = false
-			// 				}else{
-			// 					this.visible = true
-			// 				}
-			// 			},{
-			// 				root:document.querySelector(this.refer)
-			// 			});
-			// 			this.ioInstance.observe(this.$parent.$el)
-			// 		}else{
-			// 			console.warn("your brower does not support IntersectionObserver API")
-			// 		}
-			// 	}
-			// }
+			}
+			
 		}
 	}
 
@@ -174,3 +197,26 @@ var FormErrorMsg = (function(){
 		}
 	}
 })()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
