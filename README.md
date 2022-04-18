@@ -56,6 +56,8 @@ element-ui 表单验证错误提示默认展示于输入框下面，或者可以
     </el-form-item>
 </el-form>
 ```
+![表单气泡](http://www.saojun.top/assets/images/demo1.png)
+
 
 ### 滚动只展示可视区域
 ```html
@@ -97,6 +99,10 @@ element-ui 表单验证错误提示默认展示于输入框下面，或者可以
     </el-table>
 </el-form>
 ```
+
+![表单气泡](http://www.saojun.top/assets/images/demo2.gif)
+
+
 
 
 
