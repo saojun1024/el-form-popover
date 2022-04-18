@@ -14,7 +14,7 @@
 			}
 
 			.quote{
-				padding: 24px 12px;
+			padding: 24px 12px;
     		border-radius: 4px;
     		background: #eceef1;
     		border-left: 4px solid #409eff;
@@ -26,26 +26,27 @@
 		<h2>一般使用场景</h2>
 		<el-form :model="formData" :rules="rules" label-width="80px" ref="ruleForm" :show-message="false">
 			<el-form-item label="姓名" prop="username">
-				<PopTips placement="top" :hidden-after="1000" trigger="focus" ref="aa">
+				<el-form-popover placement="top">
 					<el-input v-model="formData.username" style="width:240px"></el-input>
-				</PopTips>
+				</el-form-popover>
 			</el-form-item>
 
 			<el-form-item label="性别" prop="sex">
-				<PopTips placement="top" ref="aa">
+				<el-form-popover placement="top">
 					<el-radio-group v-model="formData.sex">
 						<el-radio :label="1">男</el-radio>
 						<el-radio :label="2">女</el-radio>
 						<el-radio label="">未知</el-radio>
 					</el-radio-group>
-				</PopTips>	
+				</el-form-popover>	
 			</el-form-item>
 
 			<el-form-item label="手机号" prop="telphone" style="width:320px">
-				<PopTips placement="right" :hidden-after="1000" trigger="focus" :auto-hidden="false">
+				<el-form-popover placement="right">
 					<el-input v-model="formData.telphone"></el-input>
-				</PopTips>
+				</el-form-popover>
 			</el-form-item>
+
 			<el-form-item>
 				<el-button type="info" @click="reset">重置</el-button>
 				<el-button type="primary" @click="submit">提交</el-button>
@@ -59,7 +60,7 @@
 			表格内有滚动条时，部分输入框可能在可视区域之外，这个时候触发表单验证会将可视区域之外的气泡提示也显示出来。这个时候可以通过refer属性来指定参考元素，在这个区域之外的气泡框第一次不会出现。
 		</blockquote>
 		<el-form :model="stuInfo" :rules="rules" label-width="80px" ref="ruleForm2" :show-message="false">
-			<el-table :data="stuInfo.tableData" style="width:1000px" border :height="300" ref="table">
+			<el-table :data="stuInfo.tableData" style="width:1000px" border :height="300" ref="table" id="myTable">
 				<el-table-column label="姓名" prop="username">
 					<template slot-scope="scope">
 						<el-form-item 
@@ -67,9 +68,9 @@
 						:rules="{
 							required: true, message: '不能为空', trigger: 'blur'
 						}">
-							<PopTips placement="bottom" refer=".el-table__body-wrapper" :open-io="true">
+							<el-form-popover placement="bottom" refer="#myTable .el-table__body-wrapper" :open-io="true">
 								<el-input v-model="scope.row.username" @input="handleInput"></el-input>
-							</PopTips>
+							</el-form-popover>
 						</el-form-item>
 					</template>
 				</el-table-column>
@@ -111,7 +112,7 @@
 		}
 		
 
-		Vue.use(FormErrorMsg)
+		Vue.use(ElFormPopover)
 
 		function debounce(fn,ms){
 			var tick = null

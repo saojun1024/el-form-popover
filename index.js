@@ -1,15 +1,15 @@
 /*
- * formErrorMsg 错误提示插件
+ * ElFormPopover 错误提示插件
  * author saojun
  * date 2021-11-18
- * more detail : https://github.com/saojun1024/formErrorMsg
+ * more detail : https://github.com/saojun1024/elformpopover
  * 
  **/
 
 
-var FormErrorMsg = (function(){
+var ElFormPopover = (function(){
 	let io = null
-	const PopTips = {
+	const ElFormPopover = {
 		template:`
 			<el-popover
 				title=""
@@ -98,6 +98,7 @@ var FormErrorMsg = (function(){
 				default:false
 			}
 		},
+		
 		mounted(){
 			this.inputEl = this.$children[0].$children[0]
 			if(this.refer){
@@ -193,7 +194,7 @@ var FormErrorMsg = (function(){
 	return {
 		version:'1.0.0',
 		install:function(_Vue){
-			_Vue.component("poptips",PopTips)
+			_Vue.component("ElFormPopover",ElFormPopover)
 		}
 	}
 })()
